@@ -1,4 +1,5 @@
 # Checks that user input (number) is valid 
+
 def num_check(question, low, type):
   error = "Please enter a number more than 0"
 
