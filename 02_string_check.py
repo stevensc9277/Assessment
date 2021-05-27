@@ -6,6 +6,9 @@ def shape():
     has_number = False
     polygon = input("What is the shape you are trying to solve for? ")
 
+    if polygon == "":
+      print(error)
+      
     for i in polygon:
       if i.isdigit():
         has_number = True
