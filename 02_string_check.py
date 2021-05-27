@@ -1,25 +1,50 @@
 # checks that there are no numbers in the string for user input
-def shape():
-  error = "Please enter a valid shape"
- 
-  while True:
-    has_number = False
-    polygon = input("What is the shape you are trying to solve for? ")
+def num_check(question, low, high, type):
+  error = "Please enter a number more than {} or less than {}".format(high, low)
 
-    if polygon == "":
-      print(error)
+  while True:
+    try:
+      response = type(input(question))
+
+      if response <= low:
+        print(error)
+        print()
       
-    for i in polygon:
-      if i.isdigit():
-        has_number = True
-        
-    if has_number == True:
+      elif response >= high:
+        print(error)
+        print()
+      else:
+        return response
+    
+    except ValueError:
       print(error)
+      print()
+
+
+def string_checker(question, to_check):
+  error = "Sorry that is not a valid response"
+
+  while True:
+
+    # ask question and put response in lowercase
+    response = input(question).lower()
+    if response in to_check:
+      return response
 
     else:
-      return polygon
+      for item in to_check:
+        # checks if response is the first letter of an item in the list
+        if response == item[0]:
+          # return the entire response rather than just the first letter
+          return item
+      print(error) 
 
-appearance = shape()
-print(appearance)
+what_to_do = string_checker("Proceed? ", ["yes", "no"])
+  
+  
+  
+
+
+
 
         
