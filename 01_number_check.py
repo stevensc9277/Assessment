@@ -1,7 +1,7 @@
 # Checks that user input (number) is valid 
 
-def num_check(question, low, type):
-  error = "Please enter a number more than 0"
+def num_check(question, low, high, type):
+  error = "Please enter a number more than {} or less than {}".format(high, low)
 
   while True:
     try:
@@ -11,6 +11,9 @@ def num_check(question, low, type):
         print(error)
         print()
       
+      elif response >= 180:
+        print(error)
+        print()
       else:
         return response
     
@@ -19,5 +22,5 @@ def num_check(question, low, type):
       print()
 
 # test
-side_a = num_check("Enter a length: ", 1, float)
+side_a = num_check("Enter a length: ", 1, 180, float)
 print(side_a)
