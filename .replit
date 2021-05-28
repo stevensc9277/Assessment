@@ -1,2 +1,2 @@
 language = "python3"
-run = "python 02_string_check.py"
+run = "python 03_cos_sin.py"

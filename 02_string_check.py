@@ -1,6 +1,6 @@
 # checks that there are no numbers in the string for user input
 def num_check(question, low, high, type):
-  error = "Please enter a number more than {} or less than {}".format(high, low)
+  error = "Please enter a number more than {} or less than {}".format(low, high)
 
   while True:
     try:
