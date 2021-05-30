@@ -33,6 +33,7 @@ for item in range(0, 3):
   length = find_side()
   print(length)
   theta = math.sin(length)
+  print(theta)
   
 # convert radians to degrees
 # radians * 180/pi
