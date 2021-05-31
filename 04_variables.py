@@ -24,14 +24,31 @@ def num_check(question, low, high, type):
       print()
 
 
+def how_many(question, length_or_deg):
+  global some_angles
+  global some_lengths
+  repeats = num_check(question, 0, 3, int)
+  for item in range(0, repeats): 
+    if length_or_deg[0] == "l":
+      angles_length = num_check("How long? ", 0, 150, int)
+      some_lengths.append(angles_length)
+    
+    else:
+      angles_length = num_check("How many degrees? ", 0, 150, int)
+      some_angles.append(angles_length)
+
+    if len(some_angles) < len(some_lengths):
+      some_angles.append(0)
+    
+    else:
+      some_lengths.append(0)
+
 some_angles = []
 some_lengths = []
 
-for i in range(0, 3):
-  angles = num_check("How many degrees? ", 0, 180, int)
-  lengths = num_check("How long? ", 0, 100, float)
-  some_angles.append(angles)
-  some_lengths.append(lengths)
+angles = how_many("How many angles do you know? ", "degrees")
+lengths = how_many("How many lengths do you know? ", "long")
+
 
 anglength_dict = {
   'Angles': some_angles,
@@ -39,3 +56,4 @@ anglength_dict = {
 }
 frame = pandas.DataFrame(anglength_dict)
 print(frame)
+print(sum(some_angles))
