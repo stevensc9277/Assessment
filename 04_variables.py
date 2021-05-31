@@ -55,5 +55,6 @@ anglength_dict = {
   'Lengths': some_lengths
 }
 frame = pandas.DataFrame(anglength_dict)
+frame = frame.set_index('Angles')
 print(frame)
 print(sum(some_angles))
