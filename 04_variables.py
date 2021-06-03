@@ -43,7 +43,15 @@ some_angles = []
 some_lengths = []
 
 angles = how_many("How many angles do you know? ", "degrees")
+print()
 lengths = how_many("How many lengths do you know? ", "long")
+
+
+if len(some_angles) < len(some_lengths):
+  some_angles.append(0)
+
+elif len(some_lengths) < len(some_angles):
+  some_lengths.append(0)
 
 
 anglength_dict = {
@@ -55,4 +63,4 @@ print()
 frame = pandas.DataFrame(anglength_dict)
 frame = frame.set_index('Angles')
 print(frame)
-print(sum(some_angles))
+print("Total angles: ",sum(some_angles))
