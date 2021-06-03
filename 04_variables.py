@@ -37,11 +37,7 @@ def how_many(question, length_or_deg):
       angles_length = num_check("How many degrees? ", 0, 150, int)
       some_angles.append(angles_length)
 
-    if len(some_angles) < len(some_lengths):
-      some_angles.append(0)
-    
-    else:
-      some_lengths.append(0)
+   
 
 some_angles = []
 some_lengths = []
@@ -54,6 +50,8 @@ anglength_dict = {
   'Angles': some_angles,
   'Lengths': some_lengths
 }
+
+print()
 frame = pandas.DataFrame(anglength_dict)
 frame = frame.set_index('Angles')
 print(frame)
