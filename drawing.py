@@ -30,9 +30,11 @@ def triangle(displacement, angle):
 
   # tess.right(180)  # Turn tess around
   # tess.forward(80)  # Move her away from the origin
-
+  turtle.exitonclick()
 
   wn.mainloop()
 
 
+print("Click on screen to continue program")
 to_draw = triangle([10, 10, 10], [60, 60])
+print("Lengths are: AB - 10, BC - 10, CA - 10")
