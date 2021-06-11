@@ -1,2 +1,2 @@
 language = "python3"
-run = "python drawing.py"
+run = "python 05_area.py"
