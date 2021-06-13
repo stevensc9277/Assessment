@@ -1,6 +1,8 @@
+import pandas
 import math
+# Ask user for lengths and angles
 
-# Checks that user input (number) is valid 
+# checks user input is an integer or float
 def num_check(question, low, high, type):
   error = "Please enter a number more than {} or less than {}".format(low, high)
 
@@ -8,11 +10,11 @@ def num_check(question, low, high, type):
     try:
       response = type(input(question))
 
-      if response <= 0:
+      if response <= low:
         print(error)
         print()
       
-      elif response >= 180:
+      elif response >= high:
         print(error)
         print()
       else:
@@ -22,9 +24,52 @@ def num_check(question, low, high, type):
       print(error)
       print()
 
-side_a = num_check("How long? ", 0, 1000, float)
-side_b = num_check("How long? ", 0, 1000, float)
-inc_angle = num_check("What is the inclusive angle? ", 0, 150, float)
-height = side_b*math.sin(math.radians(inc_angle))
-area = 0.5 * height * side_a
-print("Area = {:.2f}cm^2".format(area))
+
+def how_many(question, length_or_deg):
+  global some_angles
+  global some_lengths
+  repeats = num_check(question, 0, 3, int)
+  for item in range(0, repeats): 
+    if length_or_deg[0] == "l":
+      angles_length = num_check("How long? ", 0, 150, int)
+      some_lengths.append(angles_length)
+    
+    else:
+      angles_length = num_check("How many degrees? ", 0, 150, int)
+      some_angles.append(angles_length)
+
+   
+
+some_angles = []
+some_lengths = []
+known_ang = len(some_angles)
+known_len = len(some_lengths)
+angles = how_many("How many angles do you know? ", "degrees")
+print()
+lengths = how_many("How many lengths do you know? ", "long")
+
+
+if known_ang < known_len:
+  some_angles.append(0)
+
+elif known_len < known_ang:
+  some_lengths.append(0)
+
+
+anglength_dict = {
+  'Angles': some_angles,
+  'Lengths': some_lengths
+}
+
+if known_len == 3:
+  print("Total perimeter is ", sum(some_lengths), "cm")
+
+elif known_len == known_ang:
+  
+
+  
+print()
+frame = pandas.DataFrame(anglength_dict)
+frame = frame.set_index('Angles')
+print(frame)
+print("Total angles: ",sum(some_angles))
