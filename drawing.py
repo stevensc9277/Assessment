@@ -23,7 +23,7 @@ def triangle(displacement, angle):
   turtle.setpos(displacement[1]*10, 0)
   tess.forward(displacement[1] * 10)
   tess.left(180 - angle[1])
-  turtle.setpos(displacement[2]* 5, 86) # y-axis is vertical height, x is half of line AB, need to function to find y (constantly changes)
+  # turtle.setpos(displacement[2]* 5, 86) # y-axis is vertical height, x is half of line AB, need to function to find y (constantly changes)
   turtle.write('C', move = True, font = 'style', align = 'center')
   tess.forward(displacement[2] * 10)
    # Complete the triangle
@@ -36,5 +36,5 @@ def triangle(displacement, angle):
 
 
 print("Click on screen to continue program")
-to_draw = triangle([10, 10, 10], [60, 60])
+to_draw = triangle([4, 3, 5], [90, 53.13 ])
 print("Lengths are: AB - 10, BC - 10, CA - 10")
