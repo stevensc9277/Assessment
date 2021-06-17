@@ -4,6 +4,7 @@ import turtle
 import numpy
 # Ask user for lengths and angles
 
+# to do, finish height
 # draws a triangle using given parameters
 def triangle(displacement, angle):
   # initialise turtles
@@ -20,13 +21,14 @@ def triangle(displacement, angle):
   turtle.write('A', font = 'style', move = True, align = 'right')
   tess.forward(displacement[0] * 10)  # Make tess draw a triangle
   tess.left(180 - angle[0])
-  turtle.setpos(displacement[1] * 10, 0)
+  turtle.setpos(displacement[0] * 10, 0)
   turtle.write('B', font = 'style', align = 'left')
-  turtle.setpos(displacement[1]*10, 0)
+  turtle.setpos(displacement[0]*10, 0)
   tess.forward(displacement[1] * 10)
   tess.left(180 - angle[1])
-  turtle.setpos(displacement[2]* 5, 86) # y-axis is vertical height, x is half of line AB, need to function to find y (constantly changes)
-  turtle.write('C', move = True, font = 'style', align = 'center')
+  turtle.setpos(displacement[2]* 10 * math.cos(math.radians(some_angles[1])), some_lengths[2]* 10 * math.sin(math.radians(some_angles[1]))) 
+  # y-axis is vertical height, x is distance from point B to C (horizontal), need function to find y (constantly changes)
+  turtle.write('C', font = 'style', align = 'center')
   tess.forward(displacement[2] * 10)
    # Complete the triangle
 
@@ -138,4 +140,6 @@ frame = pandas.DataFrame(anglength_dict)
 frame = frame.set_index('Angles')
 print(frame)
 print("Total angles: ", sum(some_angles))
-print("Total perimeter: ", sum(some_lengths))
+print("Total perimeter: ", round(sum(some_lengths), 2))
+
+draw = triangle(some_lengths, some_angles)
