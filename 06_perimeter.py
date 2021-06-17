@@ -130,7 +130,7 @@ elif known_len == known_ang:
     side_square = pow(some_lengths[0], 2) + pow(some_lengths[1], 2) - 2*(numpy.prod(some_lengths)) * math.cos(math.radians(some_angles[0]))
     side_own = math.sqrt(side_square)
     side_own = round(side_own, 2)
-    print("Uknown length is ", side_own)
+    print("Unknown length is ", side_own)
     some_lengths.append(side_own)
     some_angles.append(angle)
 
