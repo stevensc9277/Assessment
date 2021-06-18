@@ -1,4 +1,3 @@
-import pandas
 import math
 import turtle
 import numpy
@@ -19,7 +18,7 @@ def triangle(displacement, angle):
   turtle.write('A', font = 'style', move = True, align = 'right')
   tess.forward(displacement[0] * 10)  # Make tess draw a triangle
   tess.left(180 - angle[0])
-  turtle.setpos(displacement[0] * 10, 0)
+  turtle.setpos(displacement[0] * 15, 0)
   turtle.write('B', font = 'style', align = 'left')
   turtle.setpos(displacement[0]*10, 0)
   tess.forward(displacement[1] * 10)
@@ -101,18 +100,17 @@ anglength_dict = {
   'Angles': some_angles,
   'Lengths': some_lengths
 }
-# Identify number of variables known
-known_ang = len(some_angles)
-known_len = len(some_lengths)
+
 
 # Ask for angles and lengths
 angles = how_many("How many angles do you know? ", "degrees")
 print()
 lengths = how_many("How many lengths do you know? ", "long")
 not_angle = 0
-# find missing angle
-angle = 180 - sum(some_angles)
-some_angles.append(angle)
+
+# Identify number of variables known
+known_ang = len(some_angles)
+known_len = len(some_lengths)
 
 if known_len == 3 and known_ang == 0:
   print("Total perimeter is ", sum(some_lengths))
@@ -121,24 +119,30 @@ if known_len == 3 and known_ang == 0:
   draw = triangle([10, 10, 10], [60, 60, 60])
 
 elif known_len == 2 and known_ang >= 1:
-  # identify positions of angles and license
+  # identify positions of angles and lengths
   for i in some_angles:
     inc_angle = string_checker("Is the angle {} between the two lengths? ".format(i), ["yes", "no"])
     if inc_angle == "yes":
+      # find missing angle
+      angle = 180 - sum(some_angles)
+
       # find missing side
       side_square = pow(some_lengths[0], 2) + pow(some_lengths[1], 2) - 2*(numpy.prod(some_lengths)) * math.cos(math.radians(some_angles[0]))
       side_own = math.sqrt(side_square)
       side_own = round(side_own, 2)
       print("Unknown length is ", side_own)
       some_lengths.append(side_own)
+      some_angles.append(angle)
       break
     else:
       not_angle += 1
+      continue
       
     if not_angle == 3:
       print("Something is wrong with your input, we need to start again")
+
+elif known_len == 1 and known_ang == 1:
+  print("Not enough information")
+  print("end")
     
-    
-frame = pandas.DataFrame(anglength_dict)
-frame = frame.set_index('Angles')
-print(frame)
+draw = triangle(some_lengths, some_angles)
