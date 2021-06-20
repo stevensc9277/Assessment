@@ -135,11 +135,7 @@ elif known_len == known_ang:
     some_angles.append(angle)
 
   
-print()
-frame = pandas.DataFrame(anglength_dict)
-frame = frame.set_index('Angles')
-print(frame)
-print("Total angles: ", sum(some_angles))
+
 print("Total perimeter: ", round(sum(some_lengths), 2))
 
 draw = triangle(some_lengths, some_angles)

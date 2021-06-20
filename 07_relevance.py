@@ -37,8 +37,7 @@ def triangle(displacement, angle):
 
 
 # checks user input is an integer or float
-def num_check(question, low, high, type):
-  error = "Please enter a number more than {} or less than {}".format(low, high)
+def num_check(question, low, high, type, error):
 
   while True:
     try:
@@ -77,25 +76,14 @@ def string_checker(question, to_check):
           return item
       print(error) 
 
-# Length or angle checker
-def how_many(question, length_or_deg):
-  global some_angles
-  global some_lengths
-  repeats = num_check(question, 0, 3, int)
-  for item in range(0, repeats): 
-    if length_or_deg[0] == "l":
-      angles_length = num_check("How long? ", 0, 150, float)
-      some_lengths.append(angles_length)
-    
-    else:
-      angles_length = num_check("How many degrees? ", 0, 150, float)
-      some_angles.append(angles_length)
-
    
 # Lists for variables
 some_angles = []
 some_lengths = []
 
+remember = 0
+not_angle = 0
+right_wrong = 0
 anglength_dict = {
   'Angles': some_angles,
   'Lengths': some_lengths
@@ -103,10 +91,24 @@ anglength_dict = {
 
 
 # Ask for angles and lengths
-angles = how_many("How many angles do you know? ", "degrees")
-print()
-lengths = how_many("How many lengths do you know? ", "long")
-not_angle = 0
+ang_in = num_check("How many angles do you know? ", 0, 3, int,"At least 1 angle is needed to continue")
+
+# Make sure there are enough variables to continue
+if ang_in == 1:
+  inc_angle = string_checker("Is the angle an inclusive angle (between two lengths)? ", ["yes", "no"])
+  len_in = num_check("How many lengths do you know? ", 1, 3, int, "At least 2 lengths are needed to continue")
+
+else:
+  len_in = num_check("How many lengths do you know? ", 1, 3, int, "At least 1 length is needed to continue")
+
+# Getting angle and length values
+for i in range(0, ang_in):
+  angle = num_check("How many degrees? ")
+  some_angles.append(angle)
+
+for i in range(0, len_in):
+  length = num_check("How many degrees? ")
+  some_lengths.append(length)
 
 # Identify number of variables known
 known_ang = len(some_angles)
@@ -119,30 +121,33 @@ if known_len == 3 and known_ang == 0:
   draw = triangle([10, 10, 10], [60, 60, 60])
 
 elif known_len == 2 and known_ang >= 1:
-  # identify positions of angles and lengths
-  for i in some_angles:
-    inc_angle = string_checker("Is the angle {} between the two lengths? ".format(i), ["yes", "no"])
-    if inc_angle == "yes":
-      # find missing angle
-      angle = 180 - sum(some_angles)
+  if inc_angle == "yes":
+    # find missing angle
+    angle = 180 - sum(some_angles)
 
-      # find missing side
-      side_square = pow(some_lengths[0], 2) + pow(some_lengths[1], 2) - 2*(numpy.prod(some_lengths)) * math.cos(math.radians(some_angles[0]))
-      side_own = math.sqrt(side_square)
-      side_own = round(side_own, 2)
-      print("Unknown length is ", side_own)
-      some_lengths.append(side_own)
-      some_angles.append(angle)
-      break
-    else:
-      not_angle += 1
-      continue
-      
-    if not_angle == 3:
-      print("Something is wrong with your input, we need to start again")
+    # find missing side
+    side_square = pow(some_lengths[0], 2) + pow(some_lengths[1], 2) - 2*(numpy.prod(some_lengths)) * math.cos(math.radians(some_angles[0]))
+    side_own = math.sqrt(side_square)
+    side_own = round(side_own, 2)
+    print("Unknown length is ", side_own)
+    some_lengths.append(side_own)
+    some_angles.append(angle)
+   
+  else:
+    # not an inclusive angle so it must be opposite a length
+    for i in some_lengths:
+      opposite = string_checker("Is the angle {} opposite the line which is {} units long? ".format(some_angles[0], i), ["yes", "no"])
 
-elif known_len == 1 and known_ang == 1:
-  print("Not enough information")
-  print("end")
+      if opposite == "yes":
+        # find position in list
+        pos = some_lengths.index(i)
+        confusion = (pos - 1) * -1
+        # find all angles from here
+        in_bracket = some_lengths[pos]  * (math.sin(math.radians(some_angles[0]))) / some_lengths[pos]
+
+      else:
+        right_wrong += 1
+
+
     
 draw = triangle(some_lengths, some_angles)
