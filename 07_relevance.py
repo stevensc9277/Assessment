@@ -18,14 +18,13 @@ def triangle(displacement, angle):
   turtle.write('A', font = 'style', move = True, align = 'right')
   tess.forward(displacement[0] * 10)  # Make tess draw a triangle
   tess.left(180 - angle[0])
-  turtle.setpos(displacement[0] * 15, 0)
-  turtle.write('B', font = 'style', align = 'left')
-  turtle.setpos(displacement[0]*10, 0)
-  tess.forward(displacement[1] * 10)
-  tess.left(180 - angle[1])
-  turtle.setpos(displacement[2]* 10 * math.cos(math.radians(some_angles[1])), some_lengths[2]* 10 * math.sin(math.radians(some_angles[1]))) 
-  # y-axis is vertical height, x is distance from point B to C (horizontal), need function to find y (constantly changes)
-  turtle.write('C', font = 'style', align = 'center')
+  turtle.setpos(displacement[1] * 10, 0)	
+  turtle.write('B', font = 'style', align = 'left')	
+  turtle.setpos(displacement[1]*10, 0)	
+  tess.forward(displacement[1] * 10)	
+  tess.left(180 - angle[1])	
+  turtle.setpos(displacement[2]* 5, 86) # y-axis is vertical height, x is half of line AB, need to function to find y (constantly changes)	
+  turtle.write('C', move = True, font = 'style', align = 'center')	
   tess.forward(displacement[2] * 10)
    # Complete the triangle
 
@@ -100,33 +99,61 @@ if ang_in == 1:
 
 else:
   len_in = num_check("How many lengths do you know? ", 1, 3, int, "At least 1 length is needed to continue")
+  
 
 # Getting angle and length values
 for i in range(0, ang_in):
-  angle = num_check("How many degrees? ")
+  angle = num_check("How many degrees? ", 0, 150, float, "Please enter a number more than 0 or less than 150")
   some_angles.append(angle)
 
 for i in range(0, len_in):
-  length = num_check("How many degrees? ")
+  length = num_check("How long? ", 0, 100, float, "Please enter a number more than 0 or less than 100")
   some_lengths.append(length)
 
 # Identify number of variables known
 known_ang = len(some_angles)
 known_len = len(some_lengths)
 
+# First case: 3 lengths, 1 angle or no angle
 if known_len == 3 and known_ang == 0:
   print("Total perimeter is ", sum(some_lengths))
   print("There was not enough information to find the area")
   print("Click the drawing to continue the program")
   draw = triangle([10, 10, 10], [60, 60, 60])
 
-elif known_len == 2 and known_ang >= 1:
+elif known_len == 3 and known_ang == 1:
+  # inc angle rule for area and perimeter just add all lengths
+  for i in some_angles:
+    inc_angle = string_checker("Is the angle {} an inclusive angle between your two lengths? ".format(i), ["yes", "no"])
+    if inc_angle == "yes":
+      # find missing angle
+      angle = 180 - sum(some_angles)
+
+      # find missing side
+      side_square = pow(some_lengths[0], 2) + pow(some_lengths[1], 2) - 2*(numpy.prod(some_lengths)) * math.cos(math.radians(i))
+      side_own = math.sqrt(side_square)
+      side_own = round(side_own, 2)
+      print("Unknown length is ", side_own)
+      some_lengths.append(side_own)
+      some_angles.append(angle)
+      break
+    else:
+      not_angle += 1
+      continue
+    if not_angle == 3:
+      print("Something is wrong with your information because none of the lines have the angle in between them")
+      print("Click the drawing to start again")
+      break
+
+elif known_len == 2 and known_ang == 1:
+  for i in some_angles:
+    inc_angle = string_checker("Is the angle {} an inclusive angle between your two lengths? ".format(i), ["yes", "no"])
   if inc_angle == "yes":
     # find missing angle
     angle = 180 - sum(some_angles)
 
     # find missing side
-    side_square = pow(some_lengths[0], 2) + pow(some_lengths[1], 2) - 2*(numpy.prod(some_lengths)) * math.cos(math.radians(some_angles[0]))
+    side_square = pow(some_lengths[0], 2) + pow(some_lengths[1], 2) - 2*(numpy.prod(some_lengths)) * math.cos(math.radians(i))
     side_own = math.sqrt(side_square)
     side_own = round(side_own, 2)
     print("Unknown length is ", side_own)
@@ -135,19 +162,52 @@ elif known_len == 2 and known_ang >= 1:
    
   else:
     # not an inclusive angle so it must be opposite a length
-    for i in some_lengths:
-      opposite = string_checker("Is the angle {} opposite the line which is {} units long? ".format(some_angles[0], i), ["yes", "no"])
+    for a,b in zip(some_angles, some_lengths):
+      opposite = string_checker("Is the angle {} opposite the line which is {} units long? ".format(a, b), ["yes", "no"])
 
       if opposite == "yes":
         # find position in list
-        pos = some_lengths.index(i)
-        confusion = (pos - 1) * -1
+        pos = some_lengths.index(b)
+        confusion = (pos - right_wrong) * -1
         # find all angles from here
-        in_bracket = some_lengths[pos]  * (math.sin(math.radians(some_angles[0]))) / some_lengths[pos]
+        in_bracket = some_lengths[pos]  * (math.sin(math.radians(a))) / some_lengths[pos]
+        ang_opp_other = math.asin(math.radians(in_bracket))
+        print(ang_opp_other)
+      
 
       else:
         right_wrong += 1
+        pos = some_lengths.index(i)
+        confusion = (pos - right_wrong) * - 1
+        # find all angles from here
+        in_bracket = some_lengths[pos]  * (math.sin(math.radians(some_angles[0]))) / some_lengths[pos]
+        ang_opp_other = math.asin(math.radians(in_bracket))
+        print(ang_opp_other)
 
+elif known_ang == 2 and known_len == 1:
+  missing_angle = 180 - sum(some_angles)
+  # Use sine rule
+  for i in some_angles:
+      opposite = string_checker("Is the angle {} opposite the line which is {} units long? ".format(i, some_lengths[0]), ["yes", "no"])
 
-    
-draw = triangle(some_lengths, some_angles)
+      if opposite == "yes":
+        # find position in list
+        pos = some_angles.index(i)
+        confusion = (pos - right_wrong) * -1
+        # find all angles from here
+        in_bracket = some_lengths[pos]  * (math.sin(math.radians(a))) / some_lengths[pos]
+        ang_opp_other = math.asin(math.radians(in_bracket))
+        print(ang_opp_other)
+      
+
+      else:
+        right_wrong += 1
+        pos = some_lengths.index(i)
+        confusion = (pos - right_wrong) * - 1
+        # find all angles from here
+        in_bracket = some_lengths[pos]  * (math.sin(math.radians(some_angles[0]))) / some_lengths[pos]
+        ang_opp_other = math.asin(math.radians(in_bracket))
+        print(ang_opp_other)
+
+  some_angles.append(missing_angle)
+draw = triangle([10, 10, 10], [60, 60, 60])
