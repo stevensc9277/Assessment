@@ -1,0 +1,17 @@
+# find position in list
+pos = some_angles.index(i)
+confusion = (pos - right_wrong) * -1
+# find all angles from here
+in_bracket = some_lengths[pos]  * (math.sin(math.radians(a))) / some_lengths[pos]
+ang_opp_other = math.asin(math.radians(in_bracket))
+print(ang_opp_other)
+
+
+
+right_wrong += 1
+
+confusion = (pos - right_wrong) * - 1
+# find all angles from here
+in_bracket = some_lengths[pos]  * (math.sin(math.radians(some_angles[0]))) / some_lengths[pos]
+ang_opp_other = math.asin(math.radians(in_bracket))
+print(ang_opp_other)

@@ -98,7 +98,7 @@ if ang_in == 1:
   len_in = num_check("How many lengths do you know? ", 1, 3, int, "At least 2 lengths are needed to continue")
 
 else:
-  len_in = num_check("How many lengths do you know? ", 1, 3, int, "At least 1 length is needed to continue")
+  len_in = num_check("How many lengths do you know? ", 0, 4, int, "At least 1 or 3 lengths are needed to continue")
   
 
 # Getting angle and length values
@@ -186,28 +186,24 @@ elif known_len == 2 and known_ang == 1:
 
 elif known_ang == 2 and known_len == 1:
   missing_angle = 180 - sum(some_angles)
+  some_angles.append(missing_angle)
   # Use sine rule
   for i in some_angles:
       opposite = string_checker("Is the angle {} opposite the line which is {} units long? ".format(i, some_lengths[0]), ["yes", "no"])
 
       if opposite == "yes":
+        # divide known len by angle i and multiply result by other angle in list
+
+        fraction = some_lengths[0]/ math.sin(math.radians(i))
         # find position in list
         pos = some_angles.index(i)
-        confusion = (pos - right_wrong) * -1
-        # find all angles from here
-        in_bracket = some_lengths[pos]  * (math.sin(math.radians(a))) / some_lengths[pos]
-        ang_opp_other = math.asin(math.radians(in_bracket))
-        print(ang_opp_other)
+        print(pos)
+        if pos == 0:
+          other_side = fraction * math.sin(math.radians(some_angles[1]))
+          another_side = fraction * math.sin(math.radians(some_angles[2]))
+          print(other_side, another_side)
+        break
       
-
-      else:
-        right_wrong += 1
-        pos = some_lengths.index(i)
-        confusion = (pos - right_wrong) * - 1
-        # find all angles from here
-        in_bracket = some_lengths[pos]  * (math.sin(math.radians(some_angles[0]))) / some_lengths[pos]
-        ang_opp_other = math.asin(math.radians(in_bracket))
-        print(ang_opp_other)
 
   some_angles.append(missing_angle)
 draw = triangle([10, 10, 10], [60, 60, 60])
