@@ -82,7 +82,6 @@ some_lengths = []
 
 remember = 0
 not_angle = 0
-right_wrong = 0
 anglength_dict = {
   'Angles': some_angles,
   'Lengths': some_lengths
@@ -94,7 +93,6 @@ ang_in = num_check("How many angles do you know? ", 0, 3, int,"At least 1 angle 
 
 # Make sure there are enough variables to continue
 if ang_in == 1:
-  inc_angle = string_checker("Is the angle an inclusive angle (between two lengths)? ", ["yes", "no"])
   len_in = num_check("How many lengths do you know? ", 1, 3, int, "At least 2 lengths are needed to continue")
 
 else:
@@ -162,34 +160,48 @@ elif known_len == 2 and known_ang == 1:
    
   else:
     # not an inclusive angle so it must be opposite a length
-    for a,b in zip(some_angles, some_lengths):
-      opposite = string_checker("Is the angle {} opposite the line which is {} units long? ".format(a, b), ["yes", "no"])
+    for i in some_lengths:
+      opposite = string_checker("Is the angle {} opposite the line which is {} units long? ".format(some_angles[0], i), ["yes", "no"])
 
       if opposite == "yes":
         # find position in list
-        pos = some_lengths.index(b)
-        confusion = (pos - right_wrong) * -1
+        
+        pos = some_lengths.index(i)
+        confusion = (pos - 1) * -1
         # find all angles from here
-        in_bracket = some_lengths[pos]  * (math.sin(math.radians(a))) / some_lengths[pos]
-        ang_opp_other = math.asin(math.radians(in_bracket))
-        print(ang_opp_other)
+        fraction = some_lengths[confusion] / some_lengths[pos]
+        
+        product = fraction * math.sin(math.radians(some_angles[0])) 
+        print(fraction, product)
+        ang_opp_other = math.asin(math.radians(product)) 
+       
+        last_ang = 180 - sum(some_angles)
+        some_angles.append(ang_opp_other)
+        some_angles.append(last_ang)
+        print(some_angles)
       
 
       else:
-        right_wrong += 1
         pos = some_lengths.index(i)
-        confusion = (pos - right_wrong) * - 1
+        confusion = (pos - 1) * - 1
         # find all angles from here
-        in_bracket = some_lengths[pos]  * (math.sin(math.radians(some_angles[0]))) / some_lengths[pos]
-        ang_opp_other = math.asin(math.radians(in_bracket))
-        print(ang_opp_other)
+        fraction = some_lengths[confusion] / some_lengths[pos]
+        product = fraction * math.sin(math.radians(some_angles[0])) 
+        
+        ang_opp_other = math.asin(math.radians(product)) 
+       
+        last_ang = 180 - sum(some_angles)
+        some_angles.append(ang_opp_other)
+        some_angles.append(last_ang)
+        print(some_angles)
+      break
 
 elif known_ang == 2 and known_len == 1:
   missing_angle = 180 - sum(some_angles)
   some_angles.append(missing_angle)
   # Use sine rule
   for i in some_angles:
-      opposite = string_checker("Is the angle {} opposite the line which is {} units long? ".format(i, some_lengths[0]), ["yes", "no"])
+      opposite = string_checker("Is the angle {:.2f} opposite the line which is {} units long? ".format(i, some_lengths[0]), ["yes", "no"])
 
       if opposite == "yes":
         # divide known len by angle i and multiply result by other angle in list
@@ -202,8 +214,22 @@ elif known_ang == 2 and known_len == 1:
           other_side = fraction * math.sin(math.radians(some_angles[1]))
           another_side = fraction * math.sin(math.radians(some_angles[2]))
           print(other_side, another_side)
+        
+        elif pos == 1:
+          other_side = fraction * math.sin(math.radians(some_angles[0]))
+          another_side = fraction * math.sin(math.radians(some_angles[2]))
+          print(other_side, another_side)
+        
+        else:
+          other_side = fraction * math.sin(math.radians(some_angles[1]))
+          another_side = fraction * math.sin(math.radians(some_angles[0]))
+          print(other_side, another_side)
+          some_lengths.append(other_side)
+          some_lengths.append(another_side)
         break
-      
+
+  perimeter = sum(some_lengths)
+  
 
   some_angles.append(missing_angle)
 draw = triangle([10, 10, 10], [60, 60, 60])
