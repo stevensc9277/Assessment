@@ -80,7 +80,7 @@ def string_checker(question, to_check):
 some_angles = []
 some_lengths = []
 
-remember = 0
+
 not_angle = 0
 anglength_dict = {
   'Angles': some_angles,
@@ -121,42 +121,22 @@ if known_len == 3 and known_ang == 0:
 
 elif known_len == 3 and known_ang == 1:
   # inc angle rule for area and perimeter just add all lengths
-  for i in some_angles:
+  for i in some_lengths:
     inc_angle = string_checker("Is the angle {} an inclusive angle between your two lengths? ".format(i), ["yes", "no"])
-    if inc_angle == "yes":
-      # find missing angle
-      angle = 180 - sum(some_angles)
-
-      # find missing side
-      side_square = pow(some_lengths[0], 2) + pow(some_lengths[1], 2) - 2*(numpy.prod(some_lengths)) * math.cos(math.radians(i))
-      side_own = math.sqrt(side_square)
-      side_own = round(side_own, 2)
-      print("Unknown length is ", side_own)
-      some_lengths.append(side_own)
-      some_angles.append(angle)
-      break
-    else:
-      not_angle += 1
-      continue
-    if not_angle == 3:
-      print("Something is wrong with your information because none of the lines have the angle in between them")
-      print("Click the drawing to start again")
-      break
+    
 
 elif known_len == 2 and known_ang == 1:
   for i in some_angles:
     inc_angle = string_checker("Is the angle {} an inclusive angle between your two lengths? ".format(i), ["yes", "no"])
   if inc_angle == "yes":
-    # find missing angle
-    angle = 180 - sum(some_angles)
-
+    
     # find missing side
     side_square = pow(some_lengths[0], 2) + pow(some_lengths[1], 2) - 2*(numpy.prod(some_lengths)) * math.cos(math.radians(i))
     side_own = math.sqrt(side_square)
     side_own = round(side_own, 2)
     print("Unknown length is ", side_own)
     some_lengths.append(side_own)
-    some_angles.append(angle)
+    
    
   else:
     # not an inclusive angle so it must be opposite a length
@@ -172,29 +152,19 @@ elif known_len == 2 and known_ang == 1:
         fraction = some_lengths[confusion] / some_lengths[pos]
         
         product = fraction * math.sin(math.radians(some_angles[0])) 
-        print(fraction, product)
-        ang_opp_other = math.asin(math.radians(product)) 
-       
-        last_ang = 180 - sum(some_angles)
+        
+        ang_opp_other = round(math.degrees(math.asin(product)), 2)
+        
+        
         some_angles.append(ang_opp_other)
+        last_ang = 180 - sum(some_angles)
         some_angles.append(last_ang)
         print(some_angles)
       
 
       else:
-        pos = some_lengths.index(i)
-        confusion = (pos - 1) * - 1
-        # find all angles from here
-        fraction = some_lengths[confusion] / some_lengths[pos]
-        product = fraction * math.sin(math.radians(some_angles[0])) 
+        continue
         
-        ang_opp_other = math.asin(math.radians(product)) 
-       
-        last_ang = 180 - sum(some_angles)
-        some_angles.append(ang_opp_other)
-        some_angles.append(last_ang)
-        print(some_angles)
-      break
 
 elif known_ang == 2 and known_len == 1:
   missing_angle = 180 - sum(some_angles)
