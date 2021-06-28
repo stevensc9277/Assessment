@@ -75,7 +75,35 @@ def string_checker(question, to_check):
           return item
       print(error) 
 
-   
+# find a missing angle using sine rule
+def find_angle(find, angle):
+  pos = some_lengths.index(i)
+  confusion = (pos - 1) * -1
+  # find all angles from here
+  fraction = some_lengths[confusion] / some_lengths[pos]
+  
+  product = fraction * math.sin(math.radians(some_angles[0])) 
+  
+  ang_opp_other = round(math.degrees(math.asin(product)), 2)
+  
+  
+  some_angles.append(ang_opp_other)
+  last_ang = 180 - sum(some_angles)
+  some_angles.append(last_ang)
+  print(some_angles)
+
+# find area  
+def find_area(angle):
+  print("Imagine an arc between your two lengths while the triangle is placed vertically")
+  print()
+  for i in some_lengths:
+    hypotenuse = string_checker("Is the line which is {} units long on the right side of the arc? ".format(i), ["yes", "no"])
+    if hypotenuse == "yes":
+      # use SOH to find imaginary vertical height
+      height = math.sin(math.radians(angle)) * i
+      area = round(0.5 * height * (sum(some_lengths) - i), 2)
+      return area
+
 # Lists for variables
 some_angles = []
 some_lengths = []
@@ -119,12 +147,42 @@ if known_len == 3 and known_ang == 0:
   print("Click the drawing to continue the program")
   draw = triangle([10, 10, 10], [60, 60, 60])
 
-elif known_len == 3 and known_ang == 1:
-  # inc angle rule for area and perimeter just add all lengths
-  for i in some_lengths:
-    inc_angle = string_checker("Is the angle {} an inclusive angle between your two lengths? ".format(i), ["yes", "no"])
-    
 
+# Achieved 3 lengths, 3 angles
+elif known_len == 3 and known_ang == 1:
+  # use sine rule to find other angles
+  for i in some_lengths:
+      opposite = string_checker("Is the angle {} opposite the line which is {} units long? ".format(some_angles[0], i), ["yes", "no"])
+
+      if opposite == "yes":
+        # use function to find Angles
+        an_angle = find_angle(i, some_angles[0])
+        break
+
+      else:
+        continue
+
+      for i in some_angles:
+        inclusive_angle = string_checker("Is the angle {} between your two lengths? ".format(i), ["yes", "no"])
+        if inclusive_angle == "yes":
+          to_find = find_area(i)
+
+        else:
+          continue
+
+# Achieved 2 lengths, 3 angles and area
+elif known_len == 2 and known_ang == 2:
+  missing_angle = 180 - sum(some_angles)
+  some_angles.append(missing_angle)
+  for i in some_angles:
+    inclusive_angle = string_checker("Is the angle {} between your two lengths? ".format(i), ["yes", "no"])
+    if inclusive_angle == "yes":
+      to_find = find_area(i)
+
+    else:
+      continue
+
+# Also achieved 2 lengths, 3 angles
 elif known_len == 2 and known_ang == 1:
   for i in some_angles:
     inc_angle = string_checker("Is the angle {} an inclusive angle between your two lengths? ".format(i), ["yes", "no"])
@@ -144,23 +202,17 @@ elif known_len == 2 and known_ang == 1:
       opposite = string_checker("Is the angle {} opposite the line which is {} units long? ".format(some_angles[0], i), ["yes", "no"])
 
       if opposite == "yes":
-        # find position in list
-        
-        pos = some_lengths.index(i)
-        confusion = (pos - 1) * -1
-        # find all angles from here
-        fraction = some_lengths[confusion] / some_lengths[pos]
-        
-        product = fraction * math.sin(math.radians(some_angles[0])) 
-        
-        ang_opp_other = round(math.degrees(math.asin(product)), 2)
-        
-        
-        some_angles.append(ang_opp_other)
-        last_ang = 180 - sum(some_angles)
-        some_angles.append(last_ang)
-        print(some_angles)
-      
+        # use function to find missing angle opposite 1 of the lengths
+        an_angle = find_angle(i, some_angles[0])
+        break
+
+      else:
+        continue
+    for i in some_angles:
+      inclusive_angle = string_checker("Is the angle {} between your two lengths? ".format(i), ["yes", "no"])
+      if inclusive_angle == "yes":
+        to_find = find_area(i)
+        last_side_sqr = 
 
       else:
         continue
@@ -202,4 +254,8 @@ elif known_ang == 2 and known_len == 1:
   
 
   some_angles.append(missing_angle)
+
+print()
+print("Perimter is {} units".format(sum(some_lengths)))
+print("Area is {} units squared".format(to_find))
 draw = triangle([10, 10, 10], [60, 60, 60])
