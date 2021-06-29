@@ -96,13 +96,23 @@ def find_angle(find, angle):
 def find_area(angle):
   print("Imagine an arc between your two lengths while the triangle is placed vertically")
   print()
+  index = 0
+  other_index =  1
+  # iterate 2 items at a time using a for loop
   for i in some_lengths:
-    hypotenuse = string_checker("Is the line which is {} units long on the right side of the arc? ".format(i), ["yes", "no"])
-    if hypotenuse == "yes":
-      # use SOH to find imaginary vertical height
-      height = math.sin(math.radians(angle)) * i
-      area = round(0.5 * height * (sum(some_lengths) - i), 2)
-      return area
+    if index >= 2:
+      other_index = 0
+      break
+      
+    what_are_inc = string_checker("Do the lines which are {} and {} units long have the angle between them? ".format(some_lengths[index], some_lengths[other_index]), ["yes", "no"])
+    
+    
+    if what_are_inc == "yes":
+      # area = 0.5 * bc * sin A
+      area = 0.5 * some_lengths[index] * some_lengths[other_index] * math.sin(math.radians(angle))
+      return round(area, 2)
+    index += 1 
+    other_index += 1
 
 # Lists for variables
 some_angles = []
@@ -170,19 +180,22 @@ elif known_len == 3 and known_ang == 1:
         else:
           continue
 
-# Achieved 2 lengths, 3 angles and area
+# Achieved 3 lengths, 3 angles, area and perimeter
 elif known_len == 2 and known_ang == 2:
   missing_angle = 180 - sum(some_angles)
   some_angles.append(missing_angle)
   for i in some_angles:
     inclusive_angle = string_checker("Is the angle {} between your two lengths? ".format(i), ["yes", "no"])
     if inclusive_angle == "yes":
+      last_side = math.sqrt(pow(some_lengths[0], 2) + pow(some_lengths[1], 2) - 2 * numpy.prod(some_lengths) * math.cos(math.radians(i)))
+      some_lengths.append(round(last_side, 2))
+      
       to_find = find_area(i)
-
+      break
     else:
       continue
 
-# Also achieved 2 lengths, 3 angles
+# Also achieved 3 lengths, 3 angles, area and perimeter
 elif known_len == 2 and known_ang == 1:
   for i in some_angles:
     inc_angle = string_checker("Is the angle {} an inclusive angle between your two lengths? ".format(i), ["yes", "no"])
@@ -194,6 +207,10 @@ elif known_len == 2 and known_ang == 1:
     side_own = round(side_own, 2)
     print("Unknown length is ", side_own)
     some_lengths.append(side_own)
+
+    # enough info to find area and perimeter
+    to_find = find_area(i)
+
     
    
   else:
@@ -208,14 +225,9 @@ elif known_len == 2 and known_ang == 1:
 
       else:
         continue
+    # enough lengths to find area and perimeter
     for i in some_angles:
-      inclusive_angle = string_checker("Is the angle {} between your two lengths? ".format(i), ["yes", "no"])
-      if inclusive_angle == "yes":
-        to_find = find_area(i)
-        last_side_sqr = 
-
-      else:
-        continue
+      to_find = find_area(i)
         
 
 elif known_ang == 2 and known_len == 1:
