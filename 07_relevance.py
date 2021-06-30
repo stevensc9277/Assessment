@@ -158,7 +158,7 @@ if known_len == 3 and known_ang == 0:
   draw = triangle([10, 10, 10], [60, 60, 60])
 
 
-# Achieved 3 lengths, 3 angles
+# Achieved 3 lengths, 3 angles, perimeter and area
 elif known_len == 3 and known_ang == 1:
   # use sine rule to find other angles
   for i in some_lengths:
@@ -176,7 +176,7 @@ elif known_len == 3 and known_ang == 1:
         inclusive_angle = string_checker("Is the angle {} between your two lengths? ".format(i), ["yes", "no"])
         if inclusive_angle == "yes":
           to_find = find_area(i)
-
+          break
         else:
           continue
 
@@ -229,7 +229,7 @@ elif known_len == 2 and known_ang == 1:
     for i in some_angles:
       to_find = find_area(i)
         
-
+# Last to achieve 3 lengths & angles, area and perimeter
 elif known_ang == 2 and known_len == 1:
   missing_angle = 180 - sum(some_angles)
   some_angles.append(missing_angle)
@@ -247,19 +247,22 @@ elif known_ang == 2 and known_len == 1:
         if pos == 0:
           other_side = fraction * math.sin(math.radians(some_angles[1]))
           another_side = fraction * math.sin(math.radians(some_angles[2]))
-          print(other_side, another_side)
+          some_lengths.append(round(other_side, 2))
+          some_lengths.append(round(another_side, 2))
         
         elif pos == 1:
           other_side = fraction * math.sin(math.radians(some_angles[0]))
           another_side = fraction * math.sin(math.radians(some_angles[2]))
-          print(other_side, another_side)
+          some_lengths.append(round(other_side, 2))
+          some_lengths.append(round(another_side, 2))
         
         else:
           other_side = fraction * math.sin(math.radians(some_angles[1]))
           another_side = fraction * math.sin(math.radians(some_angles[0]))
-          print(other_side, another_side)
-          some_lengths.append(other_side)
-          some_lengths.append(another_side)
+          some_lengths.append(round(other_side, 2))
+          some_lengths.append(round(another_side, 2))
+        to_find = find_area(i)
+
         break
 
   perimeter = sum(some_lengths)
@@ -268,6 +271,6 @@ elif known_ang == 2 and known_len == 1:
   some_angles.append(missing_angle)
 
 print()
-print("Perimter is {} units".format(sum(some_lengths)))
+print("Perimter is {:.2f} units".format(sum(some_lengths)))
 print("Area is {} units squared".format(to_find))
 draw = triangle([10, 10, 10], [60, 60, 60])
