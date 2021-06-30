@@ -23,7 +23,7 @@ def triangle(displacement, angle):
   turtle.setpos(displacement[1]*10, 0)	
   tess.forward(displacement[1] * 10)	
   tess.left(180 - angle[1])	
-  turtle.setpos(displacement[2]* 5, 86) # y-axis is vertical height, x is half of line AB, need to function to find y (constantly changes)	
+  turtle.setpos(displacement[2]* 5, math.sin(math.radians(some_angles[0])) * some_lengths[1] * 10) # y-axis is vertical height, x is half of line AB, need to function to find y (constantly changes)	
   turtle.write('C', move = True, font = 'style', align = 'center')	
   tess.forward(displacement[2] * 10)
    # Complete the triangle
@@ -90,7 +90,7 @@ def find_angle(find, angle):
   some_angles.append(ang_opp_other)
   last_ang = 180 - sum(some_angles)
   some_angles.append(last_ang)
-  print(some_angles)
+ 
 
 # find area  
 def find_area(angle):
@@ -207,7 +207,19 @@ elif known_len == 2 and known_ang == 1:
     side_own = round(side_own, 2)
     print("Unknown length is ", side_own)
     some_lengths.append(side_own)
-
+    
+    # need to find angle next
+    # find all angles from here
+    fraction = some_lengths[0] / side_own
+    
+    product = fraction * math.sin(math.radians(some_angles[0])) 
+    
+    ang_opp_other = round(math.degrees(math.asin(product)), 2)
+    
+    
+    some_angles.append(ang_opp_other)
+    last_ang = 180 - sum(some_angles)
+    some_angles.append(last_ang)
     # enough info to find area and perimeter
     to_find = find_area(i)
 
@@ -273,4 +285,10 @@ elif known_ang == 2 and known_len == 1:
 print()
 print("Perimter is {:.2f} units".format(sum(some_lengths)))
 print("Area is {} units squared".format(to_find))
-draw = triangle([10, 10, 10], [60, 60, 60])
+some_lengths.sort(reverse = True)
+some_angles.sort()
+some_angles[1] = some_angles[2]
+some_angles[2] = 180 - some_angles[0] - some_angles[1] 
+
+print(some_lengths, some_angles)
+draw = triangle(some_lengths, some_angles)
