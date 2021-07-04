@@ -93,7 +93,7 @@ def find_angle(find, angle):
   some_angles.append(last_ang)
  
 
-# find area  
+# find area using Heron's law instead of inclusive angle   
 def find_area(angle):
   print("Imagine an arc between your two lengths while the triangle is placed vertically")
   print()
@@ -341,5 +341,6 @@ while keep_going == "":
   text_file.close()
   draw = triangle(some_lengths, some_angles)
   keep_going = input("Press <ENTER> to repeat program or any other key to quit. ")
-
+  some_angles.clear()
+  some_lengths.clear()
 print("Thank you for using this program and try to do your own trig homework")
