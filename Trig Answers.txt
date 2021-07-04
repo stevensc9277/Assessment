@@ -1,0 +1,12 @@
+Trig Answers
+
+        Lengths Lines
+Angles               
+50.7       6.30    AB
+71.8       5.59    BC
+57.5       5.13    CA
+
+Area is 13.62 units squared
+
+Perimter is 17.02 units
+

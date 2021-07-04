@@ -118,16 +118,19 @@ def find_area(angle):
 # Lists for variables
 some_angles = []
 some_lengths = []
-
+item = 0
 
 not_angle = 0
 anglength_dict = {
   'Angles': some_angles,
-  'Lengths': some_lengths
+  'Lengths': some_lengths,
+  'Lines': ["AB", "BC", "CA"]
 }
 
 # instructions go here
 print("These are your instructions...")
+print("All lengths are required to have the same units as I am too lazy to do the conversions for you (Help me help you)")
+
 start = input("Input any key to continue. ")
 
 keep_going = ""
@@ -144,13 +147,23 @@ while keep_going == "":
     
 
   # Getting angle and length values
-  for i in range(0, ang_in):
+  while item != ang_in:
     angle = num_check("How many degrees? ", 0, 150, float, "Please enter a number more than 0 or less than 150")
     some_angles.append(angle)
+    print()
+    item += 1
+    # can't enter angles with a sum greater than 180
+    if sum(some_angles) >= 180:
+      print("Total angle cannot be more than 180 degrees. Please try again")
+      some_angles.clear()
+      print()
+      item = 0
+      continue
 
   for i in range(0, len_in):
     length = num_check("How long? ", 0, 100, float, "Please enter a number more than 0 or less than 100")
     some_lengths.append(length)
+    print()
 
   # Identify number of variables known
   known_ang = len(some_angles)
@@ -261,7 +274,7 @@ while keep_going == "":
           fraction = some_lengths[0]/ math.sin(math.radians(i))
           # find position in list
           pos = some_angles.index(i)
-          print(pos)
+          
           if pos == 0:
             other_side = fraction * math.sin(math.radians(some_angles[1]))
             another_side = fraction * math.sin(math.radians(some_angles[2]))
@@ -286,13 +299,14 @@ while keep_going == "":
     perimeter = sum(some_lengths)
     
 
-    some_angles.append(missing_angle)
+
 
   print()
   perimeter = "Perimter is {:.2f} units".format(sum(some_lengths))
   area = "Area is {} units squared".format(to_find)
   print(perimeter)
   print(area)
+  print()
   some_lengths.sort(reverse = True)
   some_angles.sort()
   some_angles[1] = some_angles[2]
