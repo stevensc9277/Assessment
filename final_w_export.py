@@ -133,6 +133,7 @@ print("All lengths are required to have the same units as I am too lazy to do th
 
 start = input("Input any key to continue. ")
 
+# main program starts here
 keep_going = ""
 while keep_going == "":
   # Ask for angles and lengths
