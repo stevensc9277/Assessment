@@ -2,11 +2,11 @@ Trig Answers
 
         Lengths Lines
 Angles               
-45.0       1.41    AB
-90.0       1.00    BC
-45.0       1.00    CA
+30.0      10.00    AB
+90.0       8.66    BC
+60.0       5.00    CA
 
-Area is 0.5 units squared
+Area is 22 units squared
 
-Perimter is 3.41 units
+Perimter is 23.66 units
 

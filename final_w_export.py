@@ -1,10 +1,10 @@
 import math
-import turtle
 import numpy
 import pandas
 
 # draws a triangle using given parameters
 def triangle(displacement, angle):
+  import turtle as turtle
   # initialise turtles
   wn = turtle.Screen()  # Set up the window and its attributes
 
@@ -24,14 +24,16 @@ def triangle(displacement, angle):
   turtle.setpos(displacement[1]*10, 0)	
   tess.forward(displacement[1] * 10)	
   tess.left(180 - angle[1])	
-  turtle.setpos(displacement[2]* 5, math.sin(math.radians(some_angles[0])) * some_lengths[1] * 10) # y-axis is vertical height, x is half of line AB, need to function to find y (constantly changes)	
+  turtle.setpos(displacement[0]* 5, math.sin(math.radians(angle[0])) * displacement[1] * 10) # y-axis is vertical height, x is half of line AB, need to function to find y (constantly changes)	
   turtle.write('C', move = True, font = 'style', align = 'center')	
   tess.forward(displacement[2] * 10)
    # Complete the triangle
 
   # tess.right(180)  # Turn tess around
   # tess.forward(80)  # Move her away from the origin
-  turtle.exitonclick()
+  proceed = input("Enter any key to continue. ")
+  if proceed == "" or proceed != "":
+    turtle.bye()
 
   wn.mainloop()
 
@@ -94,26 +96,11 @@ def find_angle(find, angle):
  
 
 # find area using Heron's law instead of inclusive angle   
-def find_area(angle):
-  print("Imagine an arc between your two lengths while the triangle is placed vertically")
-  print()
-  index = 0
-  other_index =  1
-  # iterate 2 items at a time using a for loop
-  for i in some_lengths:
-    if index >= 2:
-      other_index = 0
-      break
-      
-    what_are_inc = string_checker("Do the lines which are {} and {} units long have the angle between them? ".format(some_lengths[index], some_lengths[other_index]), ["yes", "no"])
-    
-    
-    if what_are_inc == "yes":
-      # area = 0.5 * bc * sin A
-      area = 0.5 * some_lengths[index] * some_lengths[other_index] * math.sin(math.radians(angle))
-      return round(area, 2)
-    index += 1 
-    other_index += 1
+def find_area():
+  semi_p = sum(some_lengths)/2
+  inside = semi_p*(semi_p - some_lengths[0]) * (semi_p - some_lengths[1]) * (semi_p - some_lengths[2])
+  area = round(math.sqrt(inside))
+  return area
 
 # Lists for variables
 some_angles = []
@@ -129,9 +116,10 @@ anglength_dict = {
 
 # instructions go here
 print("These are your instructions...")
-print("All lengths are required to have the same units as I am too lazy to do the conversions for you (Help me help you)")
-
-start = input("Input any key to continue. ")
+print("All lengths are required to have the same units as\nI am too lazy to do the conversions for you (Help me help you)")
+print("Above is an example of an equilateral triangle with 3 sides ,which are: AB, BC, CB. Towards the end you'll get a list of values which correspond \nto those sides in that specific order. \nAlso")
+print()
+example = triangle([10, 10, 10], [60, 60, 60])
 
 # main program starts here
 keep_going = ""
@@ -162,7 +150,7 @@ while keep_going == "":
       continue
 
   for i in range(0, len_in):
-    length = num_check("How long? ", 0, 100, float, "Please enter a number more than 0 or less than 100")
+    length = num_check("How long is one of your lines? ", 0, 100, float, "Please enter a number more than 0 or less than 100")
     some_lengths.append(length)
     print()
 
@@ -192,13 +180,7 @@ while keep_going == "":
         else:
           continue
 
-        for i in some_angles:
-          inclusive_angle = string_checker("Is the angle {} between your two lengths? ".format(i), ["yes", "no"])
-          if inclusive_angle == "yes":
-            to_find = find_area(i)
-            break
-          else:
-            continue
+        to_find = find_area()
 
   # Achieved 3 lengths, 3 angles, area and perimeter
   elif known_len == 2 and known_ang == 2:
@@ -210,7 +192,7 @@ while keep_going == "":
         last_side = math.sqrt(pow(some_lengths[0], 2) + pow(some_lengths[1], 2) - 2 * numpy.prod(some_lengths) * math.cos(math.radians(i)))
         some_lengths.append(round(last_side, 2))
         
-        to_find = find_area(i)
+        to_find = find_area()
         break
       else:
         continue
@@ -241,10 +223,8 @@ while keep_going == "":
       last_ang = 180 - sum(some_angles)
       some_angles.append(last_ang)
       # enough info to find area and perimeter
-      to_find = find_area(i)
-
-      
-    
+      to_find = find_area()
+          
     else:
       # not an inclusive angle so it must be opposite a length
       for i in some_lengths:
@@ -258,8 +238,7 @@ while keep_going == "":
         else:
           continue
       # enough lengths to find area and perimeter
-      for i in some_angles:
-        to_find = find_area(i)
+      to_find = find_area()
           
   # Last to achieve 3 lengths & angles, area and perimeter
   elif known_ang == 2 and known_len == 1:
@@ -293,7 +272,7 @@ while keep_going == "":
             another_side = fraction * math.sin(math.radians(some_angles[0]))
             some_lengths.append(round(other_side, 2))
             some_lengths.append(round(another_side, 2))
-          to_find = find_area(i)
+          to_find = find_area()
 
           break
 
