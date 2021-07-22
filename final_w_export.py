@@ -1,10 +1,11 @@
 import math
 import numpy
 import pandas
+import turtle
+import time # Using the time library to stop termination error and keep turtle active for a few seconds
 
 # draws a triangle using given parameters
 def triangle(displacement, angle):
-  import turtle as turtle
   # initialise turtles
   wn = turtle.Screen()  # Set up the window and its attributes
 
@@ -29,14 +30,10 @@ def triangle(displacement, angle):
   tess.forward(displacement[2] * 10)
    # Complete the triangle
 
-  # tess.right(180)  # Turn tess around
-  # tess.forward(80)  # Move her away from the origin
-  proceed = input("Enter any key to continue. ")
-  if proceed == "" or proceed != "":
-    turtle.bye()
-
-  wn.mainloop()
-
+  # show triangle for a few seconds then continue program
+  time.sleep(5)
+  turtle.reset()
+  tess.reset()
 
 # checks user input is an integer or float
 def num_check(question, low, high, type, error):
@@ -117,7 +114,7 @@ anglength_dict = {
 # instructions go here
 print("These are your instructions...")
 print("All lengths are required to have the same units as\nI am too lazy to do the conversions for you (Help me help you)")
-print("Above is an example of an equilateral triangle with 3 sides ,which are: AB, BC, CB. Towards the end you'll get a list of values which correspond \nto those sides in that specific order. \nAlso")
+print("Above is an example of an equilateral triangle with 3 sides ,which are: AB, BC, CB. Towards the end you'll get a list of values which correspond \nto those sides in that specific order. \nThe angles will be shown in the order: ABC, BCA and CAB")
 print()
 example = triangle([10, 10, 10], [60, 60, 60])
 
@@ -296,7 +293,7 @@ while keep_going == "":
   ang_len_frame = ang_len_frame.set_index('Angles')
   print(ang_len_frame)
   print()
-  print("Please click on the green screen to continue")
+  print("Please click on the green screen to continue after 5 seconds")
   print()
 
   # Convert frames to strings
@@ -319,6 +316,7 @@ while keep_going == "":
   # close file
   text_file.close()
   draw = triangle(some_lengths, some_angles)
+  turtle.exitonclick()
   keep_going = input("Press <ENTER> to repeat program or any other key to quit. ")
   some_angles.clear()
   some_lengths.clear()
