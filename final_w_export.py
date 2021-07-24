@@ -2,8 +2,7 @@ import math
 import numpy
 import pandas
 import turtle
-import time # Using the time library to stop termination error and keep turtle active for a few seconds
-
+import os # will use this to reset console
 # draws a triangle using given parameters
 def triangle(displacement, angle):
   # initialise turtles
@@ -31,9 +30,8 @@ def triangle(displacement, angle):
    # Complete the triangle
 
   # show triangle for a few seconds then continue program
-  time.sleep(5)
-  turtle.reset()
-  tess.reset()
+
+  
 
 # checks user input is an integer or float
 def num_check(question, low, high, type, error):
@@ -42,11 +40,11 @@ def num_check(question, low, high, type, error):
     try:
       response = type(input(question))
 
-      if response <= low:
+      if response < low:
         print(error)
         print()
       
-      elif response >= high:
+      elif response > high:
         print(error)
         print()
       else:
@@ -103,20 +101,26 @@ def find_area():
 some_angles = []
 some_lengths = []
 item = 0
+wrong = 0
 
-not_angle = 0
 anglength_dict = {
   'Angles': some_angles,
+  'Angle_Names': ["ABC", "BCA", "CAB"],
   'Lengths': some_lengths,
   'Lines': ["AB", "BC", "CA"]
 }
 
-# instructions go here
-print("These are your instructions...")
-print("All lengths are required to have the same units as\nI am too lazy to do the conversions for you (Help me help you)")
-print("Above is an example of an equilateral triangle with 3 sides ,which are: AB, BC, CB. Towards the end you'll get a list of values which correspond \nto those sides in that specific order. \nThe angles will be shown in the order: ABC, BCA and CAB")
-print()
-example = triangle([10, 10, 10], [60, 60, 60])
+# Ask if user has used program before
+has_used = string_checker("Have you used this program before? ",["yes", "no"])
+if has_used == "yes":
+  # instructions go here
+  print("These are your instructions...")
+  print("All lengths are required to have the same units as\nI am too lazy to do the conversions for you (Help me help you)")
+  print("Above is an example of an equilateral triangle with 3 sides, which are: AB, BC, CB. Towards the end you'll get a list of values which correspond \nto those sides in that specific order. \nThe angles will be shown in the order: ABC, BCA and CAB")
+  print()
+  example = triangle([10, 10, 10], [60, 60, 60])
+else:
+  print()
 
 # main program starts here
 keep_going = ""
@@ -126,10 +130,10 @@ while keep_going == "":
 
   # Make sure there are enough variables to continue
   if ang_in == 1:
-    len_in = num_check("How many lengths do you know? ", 1, 3, int, "At least 2 lengths are needed to continue")
+    len_in = num_check("How many lengths do you know? ", 2, 3, int, "At least 2 lengths are needed to continue")
 
   else:
-    len_in = num_check("How many lengths do you know? ", 0, 4, int, "At least 1 or 3 lengths are needed to continue")
+    len_in = num_check("How many lengths do you know? ", 0, 3, int, "At least 1 or 3 lengths are needed to continue")
     
 
   # Getting angle and length values
@@ -138,7 +142,7 @@ while keep_going == "":
     some_angles.append(angle)
     print()
     item += 1
-    # can't enter angles with a sum greater than 180
+    # can't have angles with a sum greater than 180
     if sum(some_angles) >= 180:
       print("Total angle cannot be more than 180 degrees. Please try again")
       some_angles.clear()
@@ -156,14 +160,16 @@ while keep_going == "":
   known_len = len(some_lengths)
 
   # First case: 3 lengths, 1 angle or no angle
+  # Just draw a triangle and give perimeter and area. Can't solve for angles
   if known_len == 3 and known_ang == 0:
     print("Total perimeter is ", sum(some_lengths))
-    print("There was not enough information to find the area")
+    print("Area is: {} units squared", find_area())
+    print("There was not enough information to find the angles")
     print("Click the drawing to continue the program")
     draw = triangle([10, 10, 10], [60, 60, 60])
 
 
-  # Achieved 3 lengths, 3 angles, perimeter and area
+  # Uses sine rule to see which line is opposite the angle 
   elif known_len == 3 and known_ang == 1:
     # use sine rule to find other angles
     for i in some_lengths:
@@ -175,32 +181,49 @@ while keep_going == "":
           break
 
         else:
+          wrong += 1
           continue
 
+        # if user might have made a mistake, restart program
+        if wrong == 3:
+          print("You seem to have made the wrong input, please try again when the program restarts")
+          #reset wrong checker and restart 
+          wrong = 0
+          keep_going = ""
         to_find = find_area()
 
-  # Achieved 3 lengths, 3 angles, area and perimeter
+  # uses cos rule to check if an angle is between given lengths
   elif known_len == 2 and known_ang == 2:
     missing_angle = 180 - sum(some_angles)
     some_angles.append(missing_angle)
     for i in some_angles:
       inclusive_angle = string_checker("Is the angle {} between your two lengths? ".format(i), ["yes", "no"])
+      # do cos calculations to find last side
       if inclusive_angle == "yes":
         last_side = math.sqrt(pow(some_lengths[0], 2) + pow(some_lengths[1], 2) - 2 * numpy.prod(some_lengths) * math.cos(math.radians(i)))
         some_lengths.append(round(last_side, 2))
-        
+        # find area
         to_find = find_area()
         break
       else:
+        wrong += 1
         continue
+      
+      # if none
+      if wrong == 3:
+        print("You seem to have made the wrong input, please try again when the program restarts")
+        #reset wrong checker and restart 
+        wrong = 0
+        keep_going = ""
 
-  # Also achieved 3 lengths, 3 angles, area and perimeter
+  # First we can use the cos rule to find the side opposite the angle
+  # Then we can solve for the other angles using sine rule
   elif known_len == 2 and known_ang == 1:
     for i in some_angles:
       inc_angle = string_checker("Is the angle {} an inclusive angle between your two lengths? ".format(i), ["yes", "no"])
     if inc_angle == "yes":
       
-      # find missing side
+      # find missing side using cos rule (side opposite angle)
       side_square = pow(some_lengths[0], 2) + pow(some_lengths[1], 2) - 2*(numpy.prod(some_lengths)) * math.cos(math.radians(i))
       side_own = math.sqrt(side_square)
       side_own = round(side_own, 2)
@@ -233,11 +256,19 @@ while keep_going == "":
           break
 
         else:
+          wrong += 1
           continue
+
+        # if none of the angles work start program again
+        if wrong == 3:
+          print("You seem to have made the wrong input, please try again when the program restarts")
+          #reset wrong checker and restart 
+          wrong = 0
+          keep_going = ""
       # enough lengths to find area and perimeter
       to_find = find_area()
           
-  # Last to achieve 3 lengths & angles, area and perimeter
+  # This is easy, just use sine rule to find other sides
   elif known_ang == 2 and known_len == 1:
     missing_angle = 180 - sum(some_angles)
     some_angles.append(missing_angle)
@@ -249,7 +280,7 @@ while keep_going == "":
           # divide known len by angle i and multiply result by other angle in list
 
           fraction = some_lengths[0]/ math.sin(math.radians(i))
-          # find position in list
+          # find position of angle in list
           pos = some_angles.index(i)
           
           if pos == 0:
@@ -273,17 +304,17 @@ while keep_going == "":
 
           break
 
+    # get perimeter once all sides are found
     perimeter = sum(some_lengths)
     
-
-
-
   print()
-  perimeter = "Perimter is {:.2f} units".format(sum(some_lengths))
+  # give user the perimeter and area of the triangle then a dataframe showing the angles and lengths
+  perimeter = "Perimeter is {:.2f} units".format(sum(some_lengths))
   area = "Area is {} units squared".format(to_find)
   print(perimeter)
   print(area)
   print()
+  # important, sort lengths and angles to make drawing accurate (better explanation in documentation)
   some_lengths.sort(reverse = True)
   some_angles.sort()
   some_angles[1] = some_angles[2]
@@ -293,7 +324,7 @@ while keep_going == "":
   ang_len_frame = ang_len_frame.set_index('Angles')
   print(ang_len_frame)
   print()
-  print("Please click on the green screen to continue after 5 seconds")
+  print("Please click on the green screen to continue")
   print()
 
   # Convert frames to strings
@@ -315,9 +346,18 @@ while keep_going == "":
 
   # close file
   text_file.close()
+  # reset triangle from before
+  turtle.clearscreen()
+  
   draw = triangle(some_lengths, some_angles)
   turtle.exitonclick()
   keep_going = input("Press <ENTER> to repeat program or any other key to quit. ")
-  some_angles.clear()
-  some_lengths.clear()
+  if keep_going == "":
+    clear = lambda: os.system('clear')    # Clears console; better aesthetics
+    clear()
+    some_angles.clear()
+    some_lengths.clear()
+    item = 0
+    wrong = 0
+    
 print("Thank you for using this program and try to do your own trig homework")

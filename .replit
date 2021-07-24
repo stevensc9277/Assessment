@@ -1,2 +1,2 @@
 language = "python3"
-run = "python fix_draw.py"
+run = "python final_w_export.py"
