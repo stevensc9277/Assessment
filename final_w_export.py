@@ -112,7 +112,7 @@ anglength_dict = {
 
 # Ask if user has used program before
 has_used = string_checker("Have you used this program before? ",["yes", "no"])
-if has_used == "yes":
+if has_used == "no":
   # instructions go here
   print("These are your instructions...")
   print("All lengths are required to have the same units as\nI am too lazy to do the conversions for you (Help me help you)")
@@ -143,7 +143,7 @@ while keep_going == "":
     print()
     item += 1
     # can't have angles with a sum greater than 180
-    if sum(some_angles) >= 180:
+    if sum(some_angles) > 180:
       print("Total angle cannot be more than 180 degrees. Please try again")
       some_angles.clear()
       print()
