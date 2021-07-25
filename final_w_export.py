@@ -111,12 +111,16 @@ anglength_dict = {
 }
 
 # Ask if user has used program before
+print("Welcome to the trig solver/helper. PLEASE USE THIS IN REPL, AS IT WAS ONLY DESIGNED TO WORK THERE")
+print()
 has_used = string_checker("Have you used this program before? ",["yes", "no"])
 if has_used == "no":
   # instructions go here
   print("These are your instructions...")
   print("All lengths are required to have the same units as\nI am too lazy to do the conversions for you (Help me help you)")
-  print("Above is an example of an equilateral triangle with 3 sides, which are: AB, BC, CB. Towards the end you'll get a list of values which correspond \nto those sides in that specific order. \nThe angles will be shown in the order: ABC, BCA and CAB")
+  print("Above is an example of an equilateral triangle with 3 sides, which are: AB, BC, CB. \nTowards the end you'll get a list of values which correspond \nto those sides in that specific order. \nThe angles will be shown in the order: ABC, BCA and CAB")
+  print()
+  print("Also, if you were to compare the triangle drawn by the program with yours \n(assuming you already have one) the lengths have been arranged from the longest to shortest side, whereas \nthe angles are arranged from highest ----> lowest ----> difference")
   print()
   example = triangle([10, 10, 10], [60, 60, 60])
 else:
