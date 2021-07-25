@@ -122,10 +122,11 @@ if has_used == "no":
   print()
   print("Also, if you were to compare the triangle drawn by the program with yours \n(assuming you already have one) the lengths have been arranged from the longest to shortest side, whereas \nthe angles are arranged from highest ----> lowest ----> difference")
   print()
-  example = triangle([10, 10, 10], [60, 60, 60])
+  
 else:
   print()
 
+example = triangle([10, 10, 10], [60, 60, 60])
 # main program starts here
 keep_going = ""
 while keep_going == "":
