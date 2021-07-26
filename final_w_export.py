@@ -40,7 +40,7 @@ def num_check(question, low, high, type, error):
     try:
       response = type(input(question))
 
-      if response < low:
+      if response <= low:
         print(error)
         print()
       
@@ -100,8 +100,11 @@ def find_area():
 # Lists for variables
 some_angles = []
 some_lengths = []
+numbers = [0, 1, 2] # will try to use to help with sine calculations
 item = 0
 wrong = 0
+
+example = triangle([10, 10, 10], [60, 60, 60])
 
 anglength_dict = {
   'Angles': some_angles,
@@ -109,7 +112,10 @@ anglength_dict = {
   'Lengths': some_lengths,
   'Lines': ["AB", "BC", "CA"]
 }
-
+print("***********")
+print("TRIG SOLVER")
+print("***********")
+print()
 # Ask if user has used program before
 print("Welcome to the trig solver/helper. PLEASE USE THIS IN REPL, AS IT WAS ONLY DESIGNED TO WORK THERE")
 print()
@@ -118,25 +124,30 @@ if has_used == "no":
   # instructions go here
   print("These are your instructions...")
   print("All lengths are required to have the same units as\nI am too lazy to do the conversions for you (Help me help you)")
-  print("Above is an example of an equilateral triangle with 3 sides, which are: AB, BC, CB. \nTowards the end you'll get a list of values which correspond \nto those sides in that specific order. \nThe angles will be shown in the order: ABC, BCA and CAB")
+  print("Above is an example of an equilateral triangle with 3 sides, which are: AB, BC, CB. \n\nTowards the end you'll get a list of values which correspond \nto those sides in that specific order. \n\nThe angles will be shown in the order: ABC, BCA and CAB")
   print()
-  print("Also, if you were to compare the triangle drawn by the program with yours \n(assuming you already have one) the lengths have been arranged from the longest to shortest side, whereas \nthe angles are arranged from highest ----> lowest ----> difference")
+  print("Also, if you were to compare the triangle drawn by the program with yours \n(assuming you already have one) the lengths have been arranged from the longest to shortest side, \n\nwhereas the angles are arranged from highest ----> lowest ----> difference")
   print()
   
 else:
   print()
 
-example = triangle([10, 10, 10], [60, 60, 60])
 # main program starts here
 keep_going = ""
 while keep_going == "":
+  
   # Ask for angles and lengths
   ang_in = num_check("How many angles do you know? ", 0, 3, int,"At least 1 angle is needed to continue")
 
   # Make sure there are enough variables to continue
   if ang_in == 1:
-    len_in = num_check("How many lengths do you know? ", 2, 3, int, "At least 2 lengths are needed to continue")
+    len_in = num_check("How many lengths do you know? ", 1, 3, int, "At least 2 lengths are needed to continue")
 
+  elif ang_in == 3:
+    print()
+    print("Only one length is needed to continue")
+    print()
+    len_in = 1
   else:
     len_in = num_check("How many lengths do you know? ", 0, 3, int, "At least 1 or 3 lengths are needed to continue")
     
@@ -148,12 +159,12 @@ while keep_going == "":
     print()
     item += 1
     # can't have angles with a sum greater than 180
-    if sum(some_angles) > 180:
-      print("Total angle cannot be more than 180 degrees. Please try again")
-      some_angles.clear()
-      print()
-      item = 0
-      continue
+  if sum(some_angles) != 180:
+    print("Total angle cannot be more than 180 degrees. Please try again")
+    some_angles.clear()
+    print()
+    item = 0
+    continue
 
   for i in range(0, len_in):
     length = num_check("How long is one of your lines? ", 0, 100, float, "Please enter a number more than 0 or less than 100")
@@ -196,6 +207,45 @@ while keep_going == "":
           wrong = 0
           keep_going = ""
         to_find = find_area()
+
+  elif known_ang == 3 and known_len == 1:
+    # lets just make sure angles add up to 180
+    if sum(some_angles) != 180:
+      print("Your angles do not add up to 180. Please enter new angles")
+      some_angles.clear()
+      for i in range(0, 3):
+        angle = num_check("Enter a new angle: ", 0, 179, float, "Angle must be a float or integer")
+        some_angles.append(angle)
+      print()
+    # use sine rule to find other sides
+    for i in some_angles:
+        opposite = string_checker("Is the angle {} opposite the line which is {} units long? ".format(i, some_lengths[0]), ["yes", "no"])
+
+        if opposite == "yes":
+          # solve for missing lengths using sine rule
+          # identify position of angle
+          place = some_angles.index(i)
+          for i in numbers:
+            # use sine rule to find lengths
+            if i != place:
+              a_length = math.sin(math.radians(some_angles[i])) * (some_lengths[0]/math.sin(math.radians(some_angles[place])))
+              some_lengths.append(round(a_length, 2))                             
+          break
+
+        else:
+          # not right angle, loop to start
+          wrong += 1
+          continue
+
+        # if none of the angles work start program again
+        if wrong == 3:
+          print("You seem to have made the wrong input, please try again when the program restarts")
+          #reset wrong checker and restart 
+          wrong = 0
+          keep_going = ""
+    # enough lengths to find area and perimeter
+    to_find = find_area()
+        
 
   # uses cos rule to check if an angle is between given lengths
   elif known_len == 2 and known_ang == 2:
@@ -329,8 +379,6 @@ while keep_going == "":
   ang_len_frame = ang_len_frame.set_index('Angles')
   print(ang_len_frame)
   print()
-  print("Please click on the green screen to continue")
-  print()
 
   # Convert frames to strings
   ang_len_text = pandas.DataFrame.to_string(ang_len_frame)
@@ -353,10 +401,9 @@ while keep_going == "":
   text_file.close()
   # reset triangle from before
   turtle.clearscreen()
-  
+   
+  keep_going = input("Press <ENTER> to repeat program or any other key to quit. Don't worry, you'll still get your triangle. ")
   draw = triangle(some_lengths, some_angles)
-  turtle.exitonclick()
-  keep_going = input("Press <ENTER> to repeat program or any other key to quit. ")
   if keep_going == "":
     clear = lambda: os.system('clear')    # Clears console; better aesthetics
     clear()
@@ -364,5 +411,6 @@ while keep_going == "":
     some_lengths.clear()
     item = 0
     wrong = 0
+  
     
 print("Thank you for using this program and try to do your own trig homework")
