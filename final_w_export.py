@@ -141,36 +141,32 @@ while keep_going == "":
 
   # Make sure there are enough variables to continue
   if ang_in == 1:
-    len_in = num_check("How many lengths do you know? ", 1, 3, int, "At least 2 lengths are needed to continue")
+    len_in = num_check("How many lengths do you know? ", 1, 3, int, "At least 2 or 3 lengths are needed to continue")
 
   elif ang_in == 3:
     print()
     print("Only one length is needed to continue")
+    print("You only need to give 2 angles (just to avoid errors)")
     print()
     len_in = 1
+    ang_in = 2
   else:
     len_in = num_check("How many lengths do you know? ", 0, 3, int, "At least 1 or 3 lengths are needed to continue")
     
 
   # Getting angle and length values
-  while item != ang_in:
+  for i in range(0, ang_in):
     angle = num_check("How many degrees? ", 0, 150, float, "Please enter a number more than 0 or less than 150")
     some_angles.append(angle)
     print()
-    item += 1
-    # can't have angles with a sum greater than 180
-  if sum(some_angles) != 180:
-    print("Total angle cannot be more than 180 degrees. Please try again")
-    some_angles.clear()
+  
+  # can't have angles with a sum greater than 180
+  if sum(some_angles) > 180:
     print()
-    item = 0
-    continue
-
+  # getting lengths of sides
   for i in range(0, len_in):
-    length = num_check("How long is one of your lines? ", 0, 100, float, "Please enter a number more than 0 or less than 100")
+    length = num_check("How long is one of your lines? ", 0, 50, float, "Please enter a number more than 0 or less than 50 to avoid errors")
     some_lengths.append(length)
-    print()
-
   # Identify number of variables known
   known_ang = len(some_angles)
   known_len = len(some_lengths)
