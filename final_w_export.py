@@ -167,6 +167,7 @@ while keep_going == "":
     print()
     some_angles.clear()
     keep_going = input("Press <Enter> to restart or any key to quit. ")
+
     continue 
   # can't have angles with a sum greater than 180
   if sum(some_angles) > 180:
