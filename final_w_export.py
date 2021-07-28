@@ -160,6 +160,14 @@ while keep_going == "":
     some_angles.append(angle)
     print()
   
+  # make sure there are not 2 angles that add to 180
+  if ang_in == 2 and sum(some_angles) == 180:
+    print("Uh-oh. I don't think you entered you angles correctly")
+    print("Program may have to restart")
+    print()
+    some_angles.clear()
+    keep_going = input("Press <Enter> to restart or any key to quit. ")
+    continue 
   # can't have angles with a sum greater than 180
   if sum(some_angles) > 180:
     print()
@@ -201,7 +209,7 @@ while keep_going == "":
           print("You seem to have made the wrong input, please try again when the program restarts")
           #reset wrong checker and restart 
           wrong = 0
-          keep_going = ""
+          keep_going = input("Press <Enter> to restart or any key to quit. ")
         to_find = find_area()
 
   elif known_ang == 3 and known_len == 1:
@@ -238,7 +246,7 @@ while keep_going == "":
           print("You seem to have made the wrong input, please try again when the program restarts")
           #reset wrong checker and restart 
           wrong = 0
-          keep_going = ""
+          keep_going = input("Press <Enter> to restart or any key to quit. ")
     # enough lengths to find area and perimeter
     to_find = find_area()
         
@@ -265,7 +273,7 @@ while keep_going == "":
         print("You seem to have made the wrong input, please try again when the program restarts")
         #reset wrong checker and restart 
         wrong = 0
-        keep_going = ""
+        keep_going = input("Press <Enter> to restart or any key to quit. ")
 
   # First we can use the cos rule to find the side opposite the angle
   # Then we can solve for the other angles using sine rule
@@ -315,7 +323,7 @@ while keep_going == "":
           print("You seem to have made the wrong input, please try again when the program restarts")
           #reset wrong checker and restart 
           wrong = 0
-          keep_going = ""
+          keep_going = input("Press <Enter> to continue or any key to quit. ")
       # enough lengths to find area and perimeter
       to_find = find_area()
           

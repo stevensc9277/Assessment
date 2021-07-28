@@ -2,11 +2,11 @@ Trig Answers
 
        Angle_Names  Lengths Lines
 Angles                           
-30.0           ABC     5.00    AB
-90.0           BCA     4.33    BC
-60.0           CAB     2.50    CA
+0.0            ABC      5.0    AB
+90.0           BCA      5.0    BC
+90.0           CAB      0.0    CA
 
-Area is 5 units squared
+Area is 0 units squared
 
-Perimeter is 11.83 units
+Perimeter is 10.00 units
 
