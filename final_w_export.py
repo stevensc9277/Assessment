@@ -24,7 +24,7 @@ def triangle(displacement, angle):
   turtle.setpos(displacement[1]*10, 0)	
   tess.forward(displacement[1] * 10)	
   tess.left(180 - angle[1])	
-  turtle.setpos(displacement[0]* 5, math.sin(math.radians(angle[0])) * displacement[1] * 10) # y-axis is vertical height, x is half of line AB, need to function to find y (constantly changes)	
+  turtle.setpos(math.sin(math.radians(angle[0])) * displacement[1] * 10, math.sin(math.radians(angle[0])) * displacement[1] * 10) # y-axis is vertical height, x is half of line AB, need to function to find y (constantly changes)	
   turtle.write('C', move = True, font = 'style', align = 'center')	
   tess.forward(displacement[2] * 10)
    # Complete the triangle
@@ -135,7 +135,12 @@ else:
 # main program starts here
 keep_going = ""
 while keep_going == "":
-  
+  # reset lists and values here when loop restarts
+  some_angles.clear()
+  some_lengths.clear()
+  item = 0
+  wrong = 0
+
   # Ask for angles and lengths
   ang_in = num_check("How many angles do you know? ", 0, 3, int,"At least 1 angle is needed to continue")
 
@@ -143,15 +148,13 @@ while keep_going == "":
   if ang_in == 1:
     len_in = num_check("How many lengths do you know? ", 1, 3, int, "At least 2 or 3 lengths are needed to continue")
 
-  elif ang_in == 3:
+  elif ang_in >= 2:
     print()
     print("Only one length is needed to continue")
     print("You only need to give 2 angles (just to avoid errors)")
     print()
     len_in = 1
     ang_in = 2
-  else:
-    len_in = num_check("How many lengths do you know? ", 0, 3, int, "At least 1 or 3 lengths are needed to continue")
     
 
   # Getting angle and length values
@@ -160,18 +163,17 @@ while keep_going == "":
     some_angles.append(angle)
     print()
   
-  # make sure there are not 2 angles that add to 180
-  if ang_in == 2 and sum(some_angles) == 180:
+  # find missing angle if we have two already
+  if ang_in == 2:
+    missing_angle = 180 - sum(some_angles)
+    some_angles.append(missing_angle)
+
+  # can't have angles with a sum greater than 180
+  if sum(some_angles) > 180:
     print("Uh-oh. I don't think you entered you angles correctly")
     print("Program may have to restart")
     print()
-    some_angles.clear()
-    keep_going = input("Press <Enter> to restart or any key to quit. ")
-
     continue 
-  # can't have angles with a sum greater than 180
-  if sum(some_angles) > 180:
-    print()
   # getting lengths of sides
   for i in range(0, len_in):
     length = num_check("How long is one of your lines? ", 0, 50, float, "Please enter a number more than 0 or less than 50 to avoid errors")
@@ -180,18 +182,8 @@ while keep_going == "":
   known_ang = len(some_angles)
   known_len = len(some_lengths)
 
-  # First case: 3 lengths, 1 angle or no angle
-  # Just draw a triangle and give perimeter and area. Can't solve for angles
-  if known_len == 3 and known_ang == 0:
-    print("Total perimeter is ", sum(some_lengths))
-    print("Area is: {} units squared", find_area())
-    print("There was not enough information to find the angles")
-    print("Click the drawing to continue the program")
-    draw = triangle([10, 10, 10], [60, 60, 60])
-
-
   # Uses sine rule to see which line is opposite the angle 
-  elif known_len == 3 and known_ang == 1:
+  if known_len == 3 and known_ang == 1:
     # use sine rule to find other angles
     for i in some_lengths:
         opposite = string_checker("Is the angle {} opposite the line which is {} units long? ".format(some_angles[0], i), ["yes", "no"])
@@ -205,13 +197,13 @@ while keep_going == "":
           wrong += 1
           continue
 
-        # if user might have made a mistake, restart program
-        if wrong == 3:
-          print("You seem to have made the wrong input, please try again when the program restarts")
-          #reset wrong checker and restart 
-          wrong = 0
-          keep_going = input("Press <Enter> to restart or any key to quit. ")
-        to_find = find_area()
+      # if user might have made a mistake, restart program
+    if wrong == 3:
+      print("You seem to have made the wrong input, please try again when the program restarts")
+      #reset wrong checker and restart 
+      wrong = 0
+      print()
+      continue
 
   elif known_ang == 3 and known_len == 1:
     # lets just make sure angles add up to 180
@@ -242,18 +234,17 @@ while keep_going == "":
           wrong += 1
           continue
 
-        # if none of the angles work start program again
-        if wrong == 3:
-          print("You seem to have made the wrong input, please try again when the program restarts")
-          #reset wrong checker and restart 
-          wrong = 0
-          keep_going = input("Press <Enter> to restart or any key to quit. ")
-    # enough lengths to find area and perimeter
-    to_find = find_area()
+    # if none of the angles work start program again
+    if wrong == 3:
+      print("You seem to have made the wrong input, please try again when the program restarts")
+      #reset wrong checker and restart 
+      wrong = 0
+      print()
+      continue
         
 
   # uses cos rule to check if an angle is between given lengths
-  elif known_len == 2 and known_ang == 2:
+  elif known_len == 2 and known_ang == 3:
     missing_angle = 180 - sum(some_angles)
     some_angles.append(missing_angle)
     for i in some_angles:
@@ -262,19 +253,18 @@ while keep_going == "":
       if inclusive_angle == "yes":
         last_side = math.sqrt(pow(some_lengths[0], 2) + pow(some_lengths[1], 2) - 2 * numpy.prod(some_lengths) * math.cos(math.radians(i)))
         some_lengths.append(round(last_side, 2))
-        # find area
-        to_find = find_area()
         break
       else:
         wrong += 1
         continue
       
-      # if none
-      if wrong == 3:
-        print("You seem to have made the wrong input, please try again when the program restarts")
-        #reset wrong checker and restart 
-        wrong = 0
-        keep_going = input("Press <Enter> to restart or any key to quit. ")
+    # if none
+    if wrong == 3:
+      print("You seem to have made the wrong input, please try again when the program restarts")
+      #reset wrong checker and restart 
+      wrong = 0
+      print()
+      continue
 
   # First we can use the cos rule to find the side opposite the angle
   # Then we can solve for the other angles using sine rule
@@ -303,7 +293,6 @@ while keep_going == "":
       last_ang = 180 - sum(some_angles)
       some_angles.append(last_ang)
       # enough info to find area and perimeter
-      to_find = find_area()
           
     else:
       # not an inclusive angle so it must be opposite a length
@@ -319,53 +308,17 @@ while keep_going == "":
           wrong += 1
           continue
 
-        # if none of the angles work start program again
-        if wrong == 3:
-          print("You seem to have made the wrong input, please try again when the program restarts")
-          #reset wrong checker and restart 
-          wrong = 0
-          keep_going = input("Press <Enter> to continue or any key to quit. ")
-      # enough lengths to find area and perimeter
-      to_find = find_area()
-          
-  # This is easy, just use sine rule to find other sides
-  elif known_ang == 2 and known_len == 1:
-    missing_angle = 180 - sum(some_angles)
-    some_angles.append(missing_angle)
-    # Use sine rule
-    for i in some_angles:
-        opposite = string_checker("Is the angle {:.2f} opposite the line which is {} units long? ".format(i, some_lengths[0]), ["yes", "no"])
-
-        if opposite == "yes":
-          # divide known len by angle i and multiply result by other angle in list
-
-          fraction = some_lengths[0]/ math.sin(math.radians(i))
-          # find position of angle in list
-          pos = some_angles.index(i)
-          
-          if pos == 0:
-            other_side = fraction * math.sin(math.radians(some_angles[1]))
-            another_side = fraction * math.sin(math.radians(some_angles[2]))
-            some_lengths.append(round(other_side, 2))
-            some_lengths.append(round(another_side, 2))
-          
-          elif pos == 1:
-            other_side = fraction * math.sin(math.radians(some_angles[0]))
-            another_side = fraction * math.sin(math.radians(some_angles[2]))
-            some_lengths.append(round(other_side, 2))
-            some_lengths.append(round(another_side, 2))
-          
-          else:
-            other_side = fraction * math.sin(math.radians(some_angles[1]))
-            another_side = fraction * math.sin(math.radians(some_angles[0]))
-            some_lengths.append(round(other_side, 2))
-            some_lengths.append(round(another_side, 2))
-          to_find = find_area()
-
-          break
-
-    # get perimeter once all sides are found
-    perimeter = sum(some_lengths)
+      # if none of the angles work start program again
+      if wrong == 3:
+        print("You seem to have made the wrong input, please try again when the program restarts")
+        #reset wrong checker and restart 
+        wrong = 0
+        print()
+        continue 
+  
+  # get perimeter once all sides are found
+  to_find = find_area()
+  perimeter = sum(some_lengths)
     
   print()
   # give user the perimeter and area of the triangle then a dataframe showing the angles and lengths
@@ -412,10 +365,6 @@ while keep_going == "":
   if keep_going == "":
     clear = lambda: os.system('clear')    # Clears console; better aesthetics
     clear()
-    some_angles.clear()
-    some_lengths.clear()
-    item = 0
-    wrong = 0
   
     
 print("Thank you for using this program and try to do your own trig homework")
