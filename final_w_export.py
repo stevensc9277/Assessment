@@ -2,6 +2,7 @@ import math
 import numpy
 import pandas
 import turtle
+import time
 import os # will use this to reset console
 # draws a triangle using given parameters
 def triangle(displacement, angle):
@@ -24,7 +25,7 @@ def triangle(displacement, angle):
   turtle.setpos(displacement[1]*10, 0)	
   tess.forward(displacement[1] * 10)	
   tess.left(180 - angle[1])	
-  turtle.setpos(math.sin(math.radians(angle[0])) * displacement[1] * 10, math.sin(math.radians(angle[0])) * displacement[1] * 10) # y-axis is vertical height, x is half of line AB, need to function to find y (constantly changes)	
+  turtle.setpos(math.cos(math.radians(angle[2])) * displacement[2] * 10, math.sin(math.radians(angle[0])) * displacement[1] * 10) # y-axis is vertical height, x is half of line AB, need to function to find y (constantly changes)	
   turtle.write('C', move = True, font = 'style', align = 'center')	
   tess.forward(displacement[2] * 10)
    # Complete the triangle
@@ -84,7 +85,6 @@ def find_angle(find, angle):
   
   ang_opp_other = round(math.degrees(math.asin(product)), 2)
   
-  
   some_angles.append(ang_opp_other)
   last_ang = 180 - sum(some_angles)
   some_angles.append(last_ang)
@@ -105,6 +105,7 @@ item = 0
 wrong = 0
 
 example = triangle([10, 10, 10], [60, 60, 60])
+clear = lambda: os.system('clear')    # Clears console; better aesthetics
 
 anglength_dict = {
   'Angles': some_angles,
@@ -128,6 +129,7 @@ if has_used == "no":
   print()
   print("Also, if you were to compare the triangle drawn by the program with yours \n(assuming you already have one) the lengths have been arranged from the longest to shortest side, \n\nwhereas the angles are arranged from highest ----> lowest ----> difference")
   print()
+  time.sleep(5)
   
 else:
   print()
@@ -138,6 +140,8 @@ while keep_going == "":
   # reset lists and values here when loop restarts
   some_angles.clear()
   some_lengths.clear()
+  if len(some_lengths) == 0:
+    clear()
   item = 0
   wrong = 0
 
@@ -151,7 +155,7 @@ while keep_going == "":
   elif ang_in >= 2:
     print()
     print("Only one length is needed to continue")
-    print("You only need to give 2 angles (just to avoid errors)")
+    print("2 angles will be taken to continue")
     print()
     len_in = 1
     ang_in = 2
@@ -242,7 +246,6 @@ while keep_going == "":
       print()
       continue
         
-
   # uses cos rule to check if an angle is between given lengths
   elif known_len == 2 and known_ang == 3:
     missing_angle = 180 - sum(some_angles)
@@ -287,7 +290,6 @@ while keep_going == "":
       product = fraction * math.sin(math.radians(some_angles[0])) 
       
       ang_opp_other = round(math.degrees(math.asin(product)), 2)
-      
       
       some_angles.append(ang_opp_other)
       last_ang = 180 - sum(some_angles)
@@ -363,8 +365,6 @@ while keep_going == "":
   keep_going = input("Press <ENTER> to repeat program or any other key to quit. Don't worry, you'll still get your triangle. ")
   draw = triangle(some_lengths, some_angles)
   if keep_going == "":
-    clear = lambda: os.system('clear')    # Clears console; better aesthetics
     clear()
   
-    
 print("Thank you for using this program and try to do your own trig homework")
